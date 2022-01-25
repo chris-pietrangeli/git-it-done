@@ -111,7 +111,6 @@ var buttonClickHandler = function(event) {
         //clear old content
         repoContainerEl.textContent = "";
     }
-    console.log(language);
 };
 
 

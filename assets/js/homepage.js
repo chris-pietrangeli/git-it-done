@@ -4,6 +4,18 @@ var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
 
 
+var formSubmitHandler = function(event) {
+    event.preventDefault();
+    var username = nameInputEl.value.trim();
+    if (username) {
+        getUserRepos(username);
+        nameInputEl.value = "";
+    }
+    else {
+        alert("please enter a Github username");
+    }
+};
+
 var getUserRepos = function(user) {
     //format the github api url
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
@@ -16,7 +28,7 @@ var getUserRepos = function(user) {
             });
         }
         else {
-            alert("Error: Github User Not Found!");
+            alert("Error: " + response.statusText);
         }
     })
     .catch(function(error) {
@@ -35,10 +47,7 @@ var displayRepos = function(repos, searchTerm) {
         return;
     }
 
-    console.log(repos);
-    console.log(searchTerm);
     //clear old content
-    repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
 
     //loop over repos
@@ -49,7 +58,7 @@ var displayRepos = function(repos, searchTerm) {
         //create container for each repo
         var repoEl = document.createElement("a");
         repoEl.classList = "list-item flex-row justify-space-between align-center";
-        repoEl.setAttribute("href", "./single-repo-html?repo=" + repoName);
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
 
         //create a span element to hold repository name
         var titleEl = document.createElement("span");
@@ -79,18 +88,5 @@ var displayRepos = function(repos, searchTerm) {
 };
 
 
-
-var formSubmitHandler = function(event) {
-    event.preventDefault();
-    var username = nameInputEl.value.trim();
-    if (username) {
-        getUserRepos(username);
-        nameInputEl.value = "";
-    }
-    else {
-        alert("please enter a Github username");
-    }
-    console.log(event);
-}
 
 userFormEl.addEventListener("submit", formSubmitHandler);
